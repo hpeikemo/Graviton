@@ -1,3 +1,7 @@
+// js-benchmark by Hans Petter Eikemo.
+// http://github.com/hpeikemo/js-benchmark
+
+
 
 var Benchmark = new function() {
 	
