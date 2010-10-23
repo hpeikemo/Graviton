@@ -1,21 +1,36 @@
+function radialLookupTable() {	
+	var ary=[];	
+	var a=0;
+	for (var i=0; i < 8; i++) {		
+		var x = Math.round(Math.cos(a));
+		var y = Math.round(Math.sin(a));
+		var d = 1/Math.sqrt(x*x+y*y);
+		ary.push([x,y,d/8])		
+		a += Math.PI/4;
+	};	
+	return ary;	
+};
+
 var ForceMap = function(x,y,w,h) {
-	
-	var neighbors = [
-		[1,	 0, 0.17],	// East
-		[0,	-1, 0.17],	// North
-		[-1,	 0, 0.17],	// West
-		[0,	 1, 0.17],	// South
-		[1,	-1, 0.08],	// North-east
-		[-1,	-1, 0.08],	// North-west
-		[-1,	 1, 0.08],	// South-West
-		[1,	 1, 0.08]	// South-east
-	];
-	
+		
+	var neighbors = radialLookupTable();	
 	var field = new nArray(w,h);
 	var fieldBuffer = new nArray(w,h);
 	
-	var forcesTest;
-	
+	var getForceAt = function(x,y) {
+		var nV = []
+		for (var j = neighbors.length - 1; j >= 0; j--){				
+			nV[j] = field.get(
+				Math.round(x)+neighbors[j][0],
+				Math.round(y)+neighbors[j][1]					
+			);
+		};		
+		return [
+			(nV[0]-nV[4]+(nV[7]+nV[1]-nV[3]-nV[5])*0.5),
+			(nV[2]-nV[6]+(nV[1]+nV[3]-nV[5]-nV[7])*0.5)
+		]
+	}
+			
 	var c = 0;
 	
 	var updateLoopTest = Benchmark.create("Entire update loop");
@@ -23,29 +38,23 @@ var ForceMap = function(x,y,w,h) {
 	var drawLoopTest = Benchmark.create("Entire draw loop");
 	
 	this.update = function(forces) {
-		Benchmark.run(updateLoopTest);
-		
-		forcesTest = forces;
-		
-		if (c++%1 != 0) return;
-		
+		Benchmark.run(updateLoopTest);					
 		fieldBuffer.clearAll();
 		
 		for (var i = forces.length - 1; i >= 0; i--){			
 			var force = forces[i];
 			field.add(Math.round(force.x),Math.round(force.y),force.force)
 			
-			if(true) {
+			if(false) {
 				var fo = getForceAt(force.x,force.y);
-				force.x += force.vx += fo[0]*0.001;
-				force.y += force.vy += fo[1]*0.001;				
+				force.x += force.vx += fo[0]*0.01;
+				force.y += force.vy += fo[1]*0.01;				
 				force.x = (force.x+w)%w
 				force.y = (force.y+h)%h
 			}
 						
 		}
-		
-		
+				
 		Benchmark.run(forcePropagationTest);				
 		field.setEach(function(x,y,value) {
 			
@@ -55,18 +64,17 @@ var ForceMap = function(x,y,w,h) {
 				fieldBuffer.add(
 					x+neighbors[i][0],
 					y+neighbors[i][1],
-					value * neighbors[i][2] * 0.8
+					value * neighbors[i][2] * 0.9
 				);
 			};
 			
-			return value*0.1;			
+			return value * 0.1;			
 		});
 		Benchmark.end(forcePropagationTest);
-		field.addArray(fieldBuffer);		
-		
-		
+		field.addArray(fieldBuffer);
 		Benchmark.end(updateLoopTest);		
 	}
+
 
 	
 	var q = new Particle();
@@ -76,11 +84,11 @@ var ForceMap = function(x,y,w,h) {
 	q.vx = 1;
 		
 	
-	this.debug = function(context) {
+	this.debug = function(context,forces) {
 		Benchmark.run(drawLoopTest);
 		var f = 6
 		
-		if (false) {
+		if (true) {
 			var maxValue = 1;
 			field.each(function(x,y,value) {
 				if (value > maxValue) maxValue = value;				
@@ -96,8 +104,8 @@ var ForceMap = function(x,y,w,h) {
 			
 		}	
 		
-		for (var i = forcesTest.length - 1; i >= 0; i--){
-			var force = forcesTest[i];
+		for (var i = forces.length - 1; i >= 0; i--){
+			var force = forces[i];
 			context.beginPath();
 			context.strokeStyle = 'rgba(0,0,0,0.2)';
 			context.lineWidth = 1;
@@ -161,24 +169,7 @@ var ForceMap = function(x,y,w,h) {
 		Benchmark.end(drawLoopTest);
 	}
 	
-	
-	
-	var getForceAt = function(x,y) {
-		var nV = []
-		for (var j = neighbors.length - 1; j >= 0; j--){				
-			nV[j] = field.get(
-				Math.round(x)+neighbors[j][0],
-				Math.round(y)+neighbors[j][1]					
-			);
-		};			
-		
-		return [
-			(nV[0]-nV[2]+(nV[4]+nV[7]-nV[5]-nV[6])*0.5),
-			(nV[3]-nV[1]+(nV[7]+nV[6]-nV[5]-nV[4])*0.5)
-		]
-	}
-	
-		
+				
 };
 
 
