@@ -19,6 +19,7 @@ var ForceMap = function(x,y,w,h) {
 	var c = 0;
 	
 	var updateLoopTest = Benchmark.create("Entire update loop");
+	var forcePropagationTest = Benchmark.create("Force propagation loop");
 	var drawLoopTest = Benchmark.create("Entire draw loop");
 	
 	this.update = function(forces) {
@@ -44,9 +45,12 @@ var ForceMap = function(x,y,w,h) {
 						
 		}
 		
+		
+		Benchmark.run(forcePropagationTest);				
 		field.setEach(function(x,y,value) {
 			
-			for (var i = neighbors.length - 1; i >= 0; i--){
+			var i = neighbors.length;
+			while (i--){
 				
 				fieldBuffer.add(
 					x+neighbors[i][0],
@@ -57,7 +61,7 @@ var ForceMap = function(x,y,w,h) {
 			
 			return value*0.1;			
 		});
-				
+		Benchmark.end(forcePropagationTest);
 		field.addArray(fieldBuffer);		
 		
 		
@@ -65,7 +69,7 @@ var ForceMap = function(x,y,w,h) {
 	}
 
 	
-	var q = new particle();
+	var q = new Particle();
 	q.x = 2;
 	q.y = 50;
 	q.vy = 0;
@@ -90,13 +94,12 @@ var ForceMap = function(x,y,w,h) {
 				context.closePath();
 			});
 			
-		}			
-		
+		}	
 		
 		for (var i = forcesTest.length - 1; i >= 0; i--){
 			var force = forcesTest[i];
 			context.beginPath();
-			context.strokeStyle = '#0000ff';
+			context.strokeStyle = 'rgba(0,0,0,0.2)';
 			context.lineWidth = 1;
 			
 			context.arc(force.x*f,force.y*f,3+force.force*.3,0,Math.PI*2);
@@ -167,9 +170,7 @@ var ForceMap = function(x,y,w,h) {
 				Math.round(x)+neighbors[j][0],
 				Math.round(y)+neighbors[j][1]					
 			);
-		};
-		
-		
+		};			
 		
 		return [
 			(nV[0]-nV[2]+(nV[4]+nV[7]-nV[5]-nV[6])*0.5),
@@ -181,84 +182,3 @@ var ForceMap = function(x,y,w,h) {
 };
 
 
-var particle = function() {
-	
-	this.x = 0;
-	this.y = 0;
-	this.vx = 0;
-	this.vy = 0;
-	
-	this.clone = function() {
-		var c = new particle();
-		c.x = this.x;
-		c.y = this.y;
-		c.vx = this.vx;
-		c.vy = this.vy;		
-		return c;
-	}
-	
-}
-
-var nArray = function(aw,ah) {
-	var w = this.w = aw;
-	var h = this.h = ah;
-	var l = this.l = w*h;
-	
-	var data = this.data = [];
-	
-	this.get = function(x,y) {				
-		if (x < 0 || y < 0 || x >= w-1 || y >= h-1) return 0;
-		return data[ y*w + x ]
-	}
-	this.set = function(x,y,value) {
-		if (x < 0 || y < 0 || x >= w-1 || y >= h-1) return;
-		return data[ y*w + x ] = value
-	}
-	
-	this.add = function(x,y,value) {
-		if (x < 0 || y < 0 || x >= w-1 || y >= h-1) return;
-		return data[ y*w + x ] += value		
-	}
-
-	this.multiply = function(x,y,value) {
-		if (x < 0 || y < 0 || x >= w-1 || y >= h-1) return;
-		return data[ y*w + x ] *= value
-	}		
-	
-	this.each = function(callback) {
-		for (var i = l - 1; i >= 0; i--){
-			var x = i % w;
-			var y = Math.floor(i/w);
-			callback(x,y,data[i]);			
-		};
-	}
-	
-	this.addArray = function(value) {
-		for (var i = l - 1; i >= 0; i--){
-			data[i] += value.data[i];			
-		}
-	}
-		
-	this.setEach = function(callback) {
-		for (var i = l - 1; i >= 0; i--){
-			var x = i % w;
-			var y = Math.floor(i/w);
-			data[i] = callback(x,y,data[i]);
-		};
-	}
-	
-	var clearAll = this.clearAll = function(value) {
-		value = value || 0;
-		for (var i = l - 1; i >= 0; i--){
-			data[i] = value;
-		};
-	}
-	
-	var v = function() {
-	
-		clearAll()
-		
-	}();
-	
-	
-}
