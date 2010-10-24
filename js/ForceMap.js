@@ -30,11 +30,18 @@ var ForceMap = function(x,y,w,h) {
 	
 	this.update = function(forces) {
 		Benchmark.run(updateLoopTest);					
-		fieldBuffer.clearAll();						
+		fieldBuffer.clearAll();										
 		Benchmark.run(forcePropagationTest);				
-		field.each(function(x,y,value) {			
+		field.each(function(x,y,value) {						
+			var weights = [];
+			var total = 0;						
 			var i = neighbors.length;
-			while (i--){ fieldBuffer.add(x+neighbors[i][0],y+neighbors[i][1],value * neighbors[i][2]); };						
+			while (i--){total += weights[i] = 1+field.get(x+neighbors[i][0],y+neighbors[i][1])*neighbors[i][2];}			
+			var i = neighbors.length;
+			while (i--){ 
+				var f = ((total-weights[i])/total)/(weights.length-1);
+				fieldBuffer.add(x+neighbors[i][0],y+neighbors[i][1],value * f); 
+			};						
 		});		
 		
 		var swapper = field;
@@ -42,18 +49,23 @@ var ForceMap = function(x,y,w,h) {
 		fieldBuffer = swapper;				
 		Benchmark.end(forcePropagationTest);
 		
-		for (var i = forces.length - 1; i >= 0; i--){			
+		var i = forces.length;
+		while (i--){			
 			var force = forces[i];
-			field.add(Math.round(force.x),Math.round(force.y),force.force)
-			
-			if(true) {
+			field.add(Math.round(force.x),Math.round(force.y),force.force*force.force)
+		}
+		
+		
+		if(true) {
+			var i = forces.length;
+			while (i--){			
+				var force = forces[i];
 				var fo = this.getForceAt(force.x,force.y);
-				force.x += force.vx += fo[0]*0.01;
-				force.y += force.vy += fo[1]*0.01;				
+				force.x += force.vx += fo[0]*0.00001;
+				force.y += force.vy += fo[1]*0.00001;				
 				force.x = (force.x+w)%w
 				force.y = (force.y+h)%h
-			}
-						
+			}						
 		}
 				
 		Benchmark.end(updateLoopTest);		
@@ -105,8 +117,8 @@ var ForceMap = function(x,y,w,h) {
 			
 		
 			var fo = this.getForceAt(q.x,q.y);
-			q.x += q.vx += fo[0]	*.01;
-			q.y += q.vy += fo[1]	*.01;
+			q.x += q.vx += fo[0]	*.0001;
+			q.y += q.vy += fo[1]	*.0001;
 			
 			q.x += w;
 			q.y += h;
@@ -138,8 +150,8 @@ var ForceMap = function(x,y,w,h) {
 			for (var i = 50 - 1; i >= 0; i--){
       	
 				fo = this.getForceAt(p.x,p.y);
-				p.vx += fo[0]	*.01;
-				p.vy += fo[1]	*.01;
+				p.vx += fo[0]	*.0001;
+				p.vy += fo[1]	*.0001;
 				p.x += p.vx;
 				p.y += p.vy;
 				context.lineTo( p.x *f, p.y *f) 
