@@ -6,7 +6,7 @@ var App = function(canvas) {
 	
 	var c = 0
 	app.update = function() {
-		if (++c%500 == 0) Benchmark.reportAndResetAll()
+		if (++c%50 == 0) Benchmark.reportAndResetAll()
 		
 		// model.forces[2].x -= 1;
 		model.forceMap.update(model.forces);
