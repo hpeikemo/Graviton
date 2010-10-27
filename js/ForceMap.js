@@ -1,18 +1,18 @@
 function radialLookupTable() {	
-	var ary=[];	
-	var a=0;
-	for (var i=0; i < 8; i++) {		
+	var ary=[];
+	var sa = Math.PI/2
+	var l  = Math.round(Math.PI*2/sa)
+	for (var a=0; a < Math.PI*2; a += sa) {		
 		var x = Math.round(Math.cos(a));
 		var y = Math.round(Math.sin(a));
 		var d = 1/Math.sqrt(x*x+y*y);
-		ary.push([x,y,d/8])		
-		a += Math.PI/4;
-	};	
+		ary.push([x,y,d/l])
+	};
 	return ary;	
 };
 
 var ForceMap = function(x,y,w,h) {		
-	var neighbors = radialLookupTable();	
+	var nbs = radialLookupTable();	
 	var field = new nArray(w,h);
 	var fieldBuffer = new nArray(w,h);					
 	var c = 0;
@@ -22,17 +22,21 @@ var ForceMap = function(x,y,w,h) {
 	var drawLoopTest = Benchmark.create("Entire draw loop");
 	
 	this.getForceAt = function(x,y) {
-		for (var nV = [],j = neighbors.length - 1; j >= 0; j--){
-			nV[j] = field.get(Math.round(x)+neighbors[j][0],Math.round(y)+neighbors[j][1]);
+		for (var nV = [],j = nbs.length - 1; j >= 0; j--){
+			nV[j] = field.get(Math.round(x)+nbs[j][0],Math.round(y)+nbs[j][1]);
 		};
-		return [(nV[0]-nV[4]+(nV[7]+nV[1]-nV[3]-nV[5])*0.5),(nV[2]-nV[6]+(nV[1]+nV[3]-nV[5]-nV[7])*0.5)]
+		if (nbs.length == 4) {
+			return [(nV[0]-nV[2]),(nV[1]-nV[3])]
+		} else {
+			return [(nV[0]-nV[4]+(nV[7]+nV[1]-nV[3]-nV[5])*0.5),(nV[2]-nV[6]+(nV[1]+nV[3]-nV[5]-nV[7])*0.5)]
+		}
 	}
 	
 	this.update = function(forces) {
 		Benchmark.run(updateLoopTest);					
 		fieldBuffer.clearAll();
 		var i = forces.length;
-		while (i--){			
+		while (i--){
 			var force = forces[i];
 			field.add(Math.round(force.x),Math.round(force.y),force.force)
 		}		
@@ -42,16 +46,15 @@ var ForceMap = function(x,y,w,h) {
 			if (true) { //Propagate up-hill (away from gravity sink)
 				var weights = [];
 				var total = 0;						
-				var i = neighbors.length;
-				while (i--){total += weights[i] = 1+field.get(x+neighbors[i][0],y+neighbors[i][1])*neighbors[i][2];}
-				
-				var divisor = total*(weights.length-1)				
+				var i = nbs.length;
+				while (i--){total += weights[i] = 1+field.get(x+nbs[i][0],y+nbs[i][1])*nbs[i][2];}				
+				var multiplier = 1/(total*(weights.length-1))
 			}
 			
-			var i = neighbors.length;			
+			var i = nbs.length;			
 			while (i--){ 
-				var f = divisor ? (total-weights[i])/divisor : neighbors[i][2];
-				fieldBuffer.add(x+neighbors[i][0],y+neighbors[i][1],value * f * .8); 
+				var f = multiplier ? (total-weights[i])*multiplier : nbs[i][2];
+				fieldBuffer.add(x+nbs[i][0],y+nbs[i][1],value * f * .8); 
 			};
 			fieldBuffer.add(x,y,value*.2);
 		});		

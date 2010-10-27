@@ -37,7 +37,10 @@ var App = function(canvas) {
 				new Force( Math.random()*100,Math.random()*100,Math.random()*150 )
 			)
 		};
-		// model.forces.push(new Force( 50,50,1500 ));
+		var f=new Force( 50,50,150 )
+		f.vx = 3
+		f.vy = 2
+		model.forces.push(f);
 		
 		app.resize();
 	})();
