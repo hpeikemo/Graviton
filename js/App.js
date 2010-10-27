@@ -6,7 +6,7 @@ var App = function(canvas) {
 	
 	var c = 0
 	app.update = function() {
-		if (++c%50 == 0) Benchmark.reportAndResetAll()
+		if (++c%150 == 0) Benchmark.reportAndResetAll()
 		
 		// model.forces[2].x -= 1;
 		model.forceMap.update(model.forces);
@@ -14,8 +14,13 @@ var App = function(canvas) {
 	
 	app.draw = function() {
 		context.clearRect(0,0,canvas.width, canvas.height);
-		model.forceMap.debug(context,model.forces);
+		model.forceMap.debug(context,model.forces,debug);
 	}
+	
+	var debug = false;
+	app.keyup = function() {
+		debug =! debug;
+	};
 	
 	app.resize = function() {
 		canvas.width = window.innerWidth;
@@ -27,7 +32,7 @@ var App = function(canvas) {
 		
 		model.forceMap = new ForceMap(0,0,100, 100, 1);
 		model.forces = []
-		for (var i=0; i < 200; i++) {
+		for (var i=0; i < 4; i++) {
 			model.forces.push(
 				new Force( Math.random()*100,Math.random()*100,Math.random()*150 )
 			)
