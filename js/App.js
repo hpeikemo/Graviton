@@ -32,15 +32,15 @@ var App = function(canvas) {
 		
 		model.forceMap = new ForceMap(0,0,100, 100, 1);
 		model.forces = []
-		for (var i=0; i < 4; i++) {
+		for (var i=0; i < 100; i++) {
 			model.forces.push(
 				new Force( Math.random()*100,Math.random()*100,Math.random()*150 )
 			)
 		};
-		var f=new Force( 50,50,150 )
-		f.vx = 3
-		f.vy = 2
-		model.forces.push(f);
+		// var f=new Force( 50,50,150 )
+		// f.vx = 3
+		// f.vy = 2
+		// model.forces.push(f);
 		
 		app.resize();
 	})();

@@ -1,6 +1,6 @@
 function radialLookupTable() {	
 	var ary=[];
-	var sa = Math.PI/2
+	var sa = Math.PI/4
 	var l  = Math.round(Math.PI*2/sa)
 	for (var a=0; a < Math.PI*2; a += sa) {		
 		var x = Math.round(Math.cos(a));
@@ -54,7 +54,7 @@ var ForceMap = function(x,y,w,h) {
 			var i = nbs.length;			
 			while (i--){ 
 				var f = multiplier ? (total-weights[i])*multiplier : nbs[i][2];
-				fieldBuffer.add(x+nbs[i][0],y+nbs[i][1],value * f * .8); 
+				fieldBuffer.add(x+nbs[i][0],y+nbs[i][1],value * f * .78); 
 			};
 			fieldBuffer.add(x,y,value*.2);
 		});		
@@ -69,8 +69,8 @@ var ForceMap = function(x,y,w,h) {
 			while (i--){			
 				var force = forces[i];
 				var fo = this.getForceAt(force.x,force.y);
-				force.x += force.vx += fo[0]*0.01;
-				force.y += force.vy += fo[1]*0.01;				
+				force.x += force.vx += fo[0]*0.0001;
+				force.y += force.vy += fo[1]*0.0001;				
 				force.x = (force.x+w)%w
 				force.y = (force.y+h)%h
 			}						
