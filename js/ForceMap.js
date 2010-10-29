@@ -38,6 +38,13 @@ var ForceMap = function(x,y,w,h) {
 		var i = forces.length;
 		while (i--){
 			var force = forces[i];
+			//var radius = 1+Math.floor(force.force/10)
+			
+			// var j = nbs.length
+			// 			while(j--) {
+			// 				var n = nbs[j];
+			// 				field.add(Math.round(force.x)+n[0],Math.round(force.y)+n[1],force.force)
+			// 			}
 			field.add(Math.round(force.x),Math.round(force.y),force.force)
 		}		
 		Benchmark.run(forcePropagationTest);				
@@ -151,7 +158,7 @@ var ForceMap = function(x,y,w,h) {
       	
       	
 			context.beginPath();		
-			context.strokeStyle = '#ff0000';
+			context.strokeStyle = 'rgba(200,0,0,0.2)';
 			context.lineWidth = 1;
 					
 			context.moveTo( p.x * f , p.y * f)
