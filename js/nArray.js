@@ -60,4 +60,4 @@ var nArray = function(aw,ah) {
 	}();
 	
 	
-}
+};

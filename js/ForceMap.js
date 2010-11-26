@@ -58,15 +58,15 @@ var ForceMap = function(x,y,w,h) {
 				
 		Benchmark.end(updateLoopTest);		
 	}
-
-
 	
-	var q = new Particle();
-	q.x = 2;
-	q.y = 50;
-	q.vy = 0;
-	q.vx = 1;
-		
+	
+	// var q = new Particle();
+	// q.x = 2;
+	// q.y = 50;
+	// q.vy = 0;
+	// q.vx = 1;
+	
+	
 	
 	this.debug = function(context,forces) {
 		Benchmark.run(drawLoopTest);
