@@ -14,7 +14,7 @@ var App = function(canvas) {
 	
 	app.draw = function() {
 		context.clearRect(0,0,canvas.width, canvas.height);
-		// model.forceMap.debug(context,model.forces);
+		model.forceMap.debug(context,model.forces);
 	}
 	
 	app.resize = function() {
