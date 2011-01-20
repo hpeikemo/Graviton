@@ -114,7 +114,7 @@ var ForceMap = function(x,y,w,h) {
 	this.debug = function(context,forces,drawField) {
 		Benchmark.run(drawLoopTest);
 		var f = 6
-		
+
 		if (drawField) {
 			var maxValue = 1;
 			field.each(function(x,y,value) {
@@ -130,6 +130,7 @@ var ForceMap = function(x,y,w,h) {
 			});
 			
 		}	
+		
 		
 		if (false) {
   		for (var i = forces.length - 1; i >= 0; i--){
@@ -186,7 +187,7 @@ var ForceMap = function(x,y,w,h) {
       	
       	
 			context.beginPath();		
-			context.strokeStyle = 'rgba(200,200,200,0.4)';
+			context.strokeStyle = 'rgba(255,255,255,0.1)';
 			context.lineWidth = 1;
 					
 			context.moveTo( p.x * f , p.y * f)

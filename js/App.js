@@ -16,17 +16,17 @@ var App = function(canvas) {
 	}
 	
 	app.draw = function() {
-    // context.clearRect(0,0,canvas.width, canvas.height);
+    //context.clearRect(0,0,canvas.width, canvas.height);
     
-    context.fillStyle = '#bb000000';
+    context.fillStyle = 'rgba(0,0,0,.001)';
   	context.fillRect( 0, 0, canvas.width, canvas.height );
   	
-		model.forceMap.debug(context,model.forces,debug);
+		model.forceMap.debug(context,model.forces,drawdebug);
 	}
 	
-	var debug = false;
+	var drawdebug = false;
 	app.keyup = function() {
-		debug =! debug;
+		//drawdebug =! drawdebug;
 	};
 	
 	var mouse = {
@@ -53,6 +53,10 @@ var App = function(canvas) {
 	app.resize = function() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
+		
+		context.fillStyle = 'rgba(0,0,0,1)';
+  	context.fillRect( 0, 0, canvas.width, canvas.height );
+    
 	};
 	
 	(function() {
