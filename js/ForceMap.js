@@ -31,6 +31,10 @@ var ForceMap = function(x,y,w,h) {
 			return [(nV[0]-nV[4]+(nV[7]+nV[1]-nV[3]-nV[5])*0.5),(nV[2]-nV[6]+(nV[1]+nV[3]-nV[5]-nV[7])*0.5)]
 		}
 	}
+		
+	this.addToForce = function(x,y,force) {
+	  field.add(x,y,force);
+	}
 	
 	this.update = function(forces) {
 		Benchmark.run(updateLoopTest);					
@@ -165,14 +169,14 @@ var ForceMap = function(x,y,w,h) {
 			
 			
 			
-			context.beginPath();
-			context.strokeStyle = '#ff00ff';
-			context.lineWidth = 1;
-			
-			context.arc(q.x*f,q.y*f,3,0,Math.PI*2);
-			context.stroke();
-			
-			context.closePath();
+			//context.beginPath();
+			//context.strokeStyle = '#ff00ff';
+			//context.lineWidth = 1;
+			//
+			//context.arc(q.x*f,q.y*f,3,0,Math.PI*2);
+			//context.stroke();
+			//
+			//context.closePath();
 			
 			
 			var p = q.clone();		

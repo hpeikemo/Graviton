@@ -8,12 +8,18 @@ var App = function(canvas) {
 	app.update = function() {
 		if (++c%150 == 0) Benchmark.reportAndResetAll()
 		
-		// model.forces[2].x -= 1;
+    if (mouse.pressed) model.forceMap.addToForce(Math.round(mouse.x/6),Math.round(mouse.y/6),40);
+
 		model.forceMap.update(model.forces);
+		
 	}
 	
 	app.draw = function() {
-		context.clearRect(0,0,canvas.width, canvas.height);
+    // context.clearRect(0,0,canvas.width, canvas.height);
+    
+    context.fillStyle = '#bb000000';
+  	context.fillRect( 0, 0, canvas.width, canvas.height );
+  	
 		model.forceMap.debug(context,model.forces,debug);
 	}
 	
@@ -21,6 +27,25 @@ var App = function(canvas) {
 	app.keyup = function() {
 		debug =! debug;
 	};
+	
+	var mouse = {
+	  pressed:false,
+	  x:0,
+	  y:0
+	};
+	
+	app.mousedown = function(e) {
+		mouse.pressed = true;
+	};
+	
+	app.mouseup = function(e) {
+		mouse.pressed = false
+	};	
+	app.mousemove = function(e) {
+		mouse.x = e.clientX;
+		mouse.y = e.clientY;
+	};
+	
 	
 	app.resize = function() {
 		canvas.width = window.innerWidth;
@@ -37,10 +62,10 @@ var App = function(canvas) {
 				new Force( Math.random()*100,Math.random()*100,Math.random()*150 )
 			)
 		};
-		// var f=new Force( 50,50,150 )
-		// f.vx = 3
-		// f.vy = 2
-		// model.forces.push(f);
+//		var f=new Force( 50,50,150 )
+    // f.vx = 3
+    // f.vy = 2
+//		model.forces.push(f);
 		
 		app.resize();
 	})();
