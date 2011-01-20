@@ -7,8 +7,9 @@ var App = function(canvas) {
 	var c = 0
 	app.update = function() {
 		if (++c%150 == 0) Benchmark.reportAndResetAll()
-		
-    if (mouse.pressed) model.forceMap.addToForce(Math.round(mouse.x/6),Math.round(mouse.y/6),40);
+
+		mouse.force += 2;
+    if (mouse.pressed) model.forceMap.addToForce(Math.round(mouse.x/6),Math.round(mouse.y/6),mouse.force);
 
 		model.forceMap.update(model.forces);
 		
@@ -29,6 +30,7 @@ var App = function(canvas) {
 	};
 	
 	var mouse = {
+	  force:0,
 	  pressed:false,
 	  x:0,
 	  y:0
@@ -40,6 +42,7 @@ var App = function(canvas) {
 	
 	app.mouseup = function(e) {
 		mouse.pressed = false
+		mouse.force = 0;
 	};	
 	app.mousemove = function(e) {
 		mouse.x = e.clientX;
@@ -57,9 +60,9 @@ var App = function(canvas) {
 		
 		model.forceMap = new ForceMap(0,0,100, 100, 1);
 		model.forces = []
-		for (var i=0; i < 50; i++) {
+		for (var i=0; i < 20; i++) {
 			model.forces.push(
-				new Force( Math.random()*100,Math.random()*100,Math.random()*150 )
+				new Force( Math.random()*100,Math.random()*100,Math.random()*50 )
 			)
 		};
 //		var f=new Force( 50,50,150 )

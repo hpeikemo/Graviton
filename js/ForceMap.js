@@ -131,16 +131,18 @@ var ForceMap = function(x,y,w,h) {
 			
 		}	
 		
-		for (var i = forces.length - 1; i >= 0; i--){
-			var force = forces[i];
-			context.beginPath();
-			context.strokeStyle = 'rgba(0,0,0,0.2)';
-			context.lineWidth = 1;
-			
-			context.arc(force.x*f,force.y*f,3+force.force*.3,0,Math.PI*2);
-			context.stroke();
-			
-			context.closePath();
+		if (false) {
+  		for (var i = forces.length - 1; i >= 0; i--){
+  			var force = forces[i];
+  			context.beginPath();
+  			context.strokeStyle = 'rgba(0,0,0,0.2)';
+  			context.lineWidth = 1;
+
+  			context.arc(force.x*f,force.y*f,3+force.force*.3,0,Math.PI*2);
+  			context.stroke();
+
+  			context.closePath();
+  		}		  
 		}
 		
 		
@@ -184,7 +186,7 @@ var ForceMap = function(x,y,w,h) {
       	
       	
 			context.beginPath();		
-			context.strokeStyle = 'rgba(200,0,0,0.2)';
+			context.strokeStyle = 'rgba(200,200,200,0.4)';
 			context.lineWidth = 1;
 					
 			context.moveTo( p.x * f , p.y * f)
