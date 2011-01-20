@@ -7,41 +7,31 @@ var App = function(canvas) {
 	var c = 0
 	app.update = function() {
 		if (++c%150 == 0) Benchmark.reportAndResetAll()
-		
-		// model.forces[2].x -= 1;
-		model.forceMap.update(model.forces);
+		model.system.update();
 	}
 	
 	app.draw = function() {
-		context.clearRect(0,0,canvas.width, canvas.height);
-		model.forceMap.debug(context,model.forces,debug);
+//		context.clearRect(0,0,canvas.width, canvas.height);
+//		model.forceMap.debug(context,model.forces,debug);
+    model.system.draw();
 	}
 	
 	var debug = false;
 	app.keyup = function() {
-		debug =! debug;
+//		debug =! debug;
 	};
 	
 	app.resize = function() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 	};
 	
 	(function() {
 		context = canvas.getContext('2d');
-		
-		model.forceMap = new ForceMap(0,0,100, 100, 1);
-		model.forces = []
-		for (var i=0; i < 50; i++) {
-			model.forces.push(
-				new Force( Math.random()*100,Math.random()*100,Math.random()*150 )
-			)
-		};
-		// var f=new Force( 50,50,150 )
-		// f.vx = 3
-		// f.vy = 2
-		// model.forces.push(f);
-		
 		app.resize();
+		
+		model.system = new Particlesystem();
+		model.system.addParticle(new ForceParticle(context));
+		
 	})();
 };

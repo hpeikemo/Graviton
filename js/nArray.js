@@ -53,11 +53,8 @@ var nArray = function(aw,ah) {
 		};
 	}
 	
-	var v = function() {
-	
-		clearAll()
-		
+	var v = function() {	
+		clearAll()		
 	}();
-	
-	
+		
 }

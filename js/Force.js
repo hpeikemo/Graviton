@@ -6,7 +6,6 @@ var Force = function(x,y,force) {
 	this.force = force;
 };
 
-
 var Particle = function() {
 	
 	this.x = 0;

@@ -100,6 +100,7 @@ var ForceMap = function(x,y,w,h) {
 
 
 	
+	
 	var q = new Particle();
 	q.x = 2;
 	q.y = 50;
