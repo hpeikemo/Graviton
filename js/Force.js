@@ -23,4 +23,16 @@ var Particle = function() {
 		return c;
 	}
 	
+	this.friction = function(fr,max) {		
+		this.vx = Math.min(Math.max(this.vx*fr,-max),max);
+		this.vy = Math.min(Math.max(this.vy*fr,-max),max);		
+	}
+	
+	this.applyForce = function(fo,mult,clamping) {
+		var clamping = clamping || 0;
+		this.vx += Math.min(Math.max(fo[0]*mult,-clamping),clamping);
+		this.vy += Math.min(Math.max(fo[1]*mult,-clamping),clamping);		
+	}
+	
 }
+

@@ -1,6 +1,6 @@
 function radialLookupTable() {	
 	var ary=[];
-	var sa = Math.PI/4
+	var sa = Math.PI/2
 	var l  = Math.round(Math.PI*2/sa)
 	for (var a=0; a < Math.PI*2; a += sa) {		
 		var x = Math.round(Math.cos(a));
@@ -71,13 +71,25 @@ var ForceMap = function(x,y,w,h) {
 		fieldBuffer = swapper;				
 		Benchmark.end(forcePropagationTest);
 						
-		if(true) {
+						
+		if(false) {
 			var i = forces.length;
 			while (i--){			
 				var force = forces[i];
 				var fo = this.getForceAt(force.x,force.y);
 				force.x += force.vx += fo[0]*0.0001;
 				force.y += force.vy += fo[1]*0.0001;				
+				force.x = (force.x+w)%w
+				force.y = (force.y+h)%h
+			}
+		}					
+		
+		if(true) {
+			var i = forces.length;
+			while (i--){			
+				var force = forces[i];
+				force.x += force.vx += (Math.random()-0.5)*0.01;
+				force.y += force.vy += (Math.random()-0.5)*0.01;				
 				force.x = (force.x+w)%w
 				force.y = (force.y+h)%h
 			}						
@@ -130,10 +142,20 @@ var ForceMap = function(x,y,w,h) {
 		
 		if (true) {
 			
-		
+			var FRICTION = .995;
+			var MULT = .1;
+			var FORCE_CLAMP = .2;
+			var VELOCITY_CLAMP = 20;
+					
 			var fo = this.getForceAt(q.x,q.y);
-			q.x += q.vx += fo[0]	*.01;
-			q.y += q.vy += fo[1]	*.01;
+			// q.vx += fo[0]	*.5;			
+			// q.vy += fo[1]	*.5;
+			
+			q.applyForce(fo,MULT,FORCE_CLAMP)			
+			q.friction(FRICTION,VELOCITY_CLAMP);
+			
+			q.x += q.vx;
+			q.y += q.vy;
 			
 			q.x += w;
 			q.y += h;
@@ -165,8 +187,12 @@ var ForceMap = function(x,y,w,h) {
 			for (var i = 50 - 1; i >= 0; i--){
       	
 				fo = this.getForceAt(p.x,p.y);
-				p.vx += fo[0]	*.01;
-				p.vy += fo[1]	*.01;
+				// p.vx += fo[0]	*.5;
+				// p.vy += fo[1]	*.5;
+				
+				p.applyForce(fo,MULT,FORCE_CLAMP);				
+				p.friction(FRICTION,VELOCITY_CLAMP);
+				
 				p.x += p.vx;
 				p.y += p.vy;
 				context.lineTo( p.x *f, p.y *f) 
