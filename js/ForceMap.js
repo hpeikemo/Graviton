@@ -118,7 +118,7 @@ var ForceMap = function(x,y,w,h) {
 		for (var i = forces.length - 1; i >= 0; i--){
 			var force = forces[i];
 			context.beginPath();
-			context.strokeStyle = 'rgba(0,0,0,0.2)';
+			context.strokeStyle = 'rgba(0,0,20,0.05)';
 			context.lineWidth = 1;
 			
 			context.arc(force.x*f,force.y*f,3+force.force*.3,0,Math.PI*2);
@@ -144,7 +144,7 @@ var ForceMap = function(x,y,w,h) {
 			
 			
 			context.beginPath();
-			context.strokeStyle = '#ff00ff';
+			context.strokeStyle = 'rgba(100,30,100,0.3)';
 			context.lineWidth = 1;
 			
 			context.arc(q.x*f,q.y*f,3,0,Math.PI*2);
@@ -158,7 +158,7 @@ var ForceMap = function(x,y,w,h) {
       	
       	
 			context.beginPath();		
-			context.strokeStyle = 'rgba(200,0,0,0.2)';
+			context.strokeStyle = 'rgba(200,0,0,0.5)';
 			context.lineWidth = 1;
 					
 			context.moveTo( p.x * f , p.y * f)

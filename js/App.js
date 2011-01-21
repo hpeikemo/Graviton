@@ -13,7 +13,11 @@ var App = function(canvas) {
 	}
 	
 	app.draw = function() {
-		context.clearRect(0,0,canvas.width, canvas.height);
+//		context.clearRect(0,0,canvas.width, canvas.height);
+
+    context.fillStyle = 'rgba(255,255,255,.06)';
+    context.fillRect( 0, 0, canvas.width, canvas.height );
+
 		model.forceMap.debug(context,model.forces,debug);
 	}
 	
@@ -32,9 +36,9 @@ var App = function(canvas) {
 		
 		model.forceMap = new ForceMap(0,0,100, 100, 1);
 		model.forces = []
-		for (var i=0; i < 1000; i++) {
+		for (var i=0; i < 100; i++) {
 			model.forces.push(
-				new Force( Math.random()*100,Math.random()*100,Math.random()*5 )
+				new Force( Math.random()*100,Math.random()*100,Math.random()*50 )
 			)
 		};
 		// var f=new Force( 50,50,150 )
